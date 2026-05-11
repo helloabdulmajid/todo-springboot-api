@@ -2,6 +2,8 @@ package com.abdulmajid.todo.controller;
 
 import com.abdulmajid.todo.model.Todo;
 import com.abdulmajid.todo.repository.TodoRepository;
+import com.abdulmajid.todo.service.TodoService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,48 +12,40 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 public class TodoController {
 
-    private final TodoRepository todoRepository;
+    private final TodoService todoService;
 
-    public TodoController(TodoRepository todoRepository) {
+    public TodoController(TodoService todoService) {
 
-        this.todoRepository = todoRepository;
+        this.todoService = todoService;
     }
-
 
     @GetMapping
     public List<Todo> getTodos() {
 
-        return todoRepository.findAll();
+        return todoService.getTodos();
     }
 
     @PostMapping
-    public Todo addTodo(@RequestBody Todo todo) {
+    public Todo addTodo(@Valid @RequestBody Todo todo) {
 
-        return todoRepository.save(todo);
+        return todoService.addTodo(todo);
     }
 
     @DeleteMapping("/{id}")
     public String deleteTodo(@PathVariable Long id) {
 
-        todoRepository.deleteById(id);
+        todoService.deleteTodo(id);
 
         return "Todo deleted successfully";
     }
 
     @PutMapping("/{id}")
     public Todo updateTodo(
+            @Valid
             @PathVariable Long id,
             @RequestBody Todo updatedTodo
     ) {
 
-        Todo todo = todoRepository
-                .findById(id)
-                .orElseThrow();
-
-        todo.setText(updatedTodo.getText());
-
-        todo.setCompleted(updatedTodo.isCompleted());
-
-        return todoRepository.save(todo);
+        return todoService.updateTodo(id, updatedTodo);
     }
 }
