@@ -2,10 +2,11 @@ package com.abdulmajid.todo.controller;
 
 import com.abdulmajid.todo.dto.TodoRequest;
 import com.abdulmajid.todo.model.Todo;
-import com.abdulmajid.todo.repository.TodoRepository;
 import com.abdulmajid.todo.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 @RestController
@@ -21,33 +22,40 @@ public class TodoController {
     }
 
     @GetMapping
-    public List<Todo> getTodos() {
+    public ResponseEntity<List<Todo>> getTodos() {
 
-        return todoService.getTodos();
+        return ResponseEntity.ok(
+                todoService.getTodos()
+        );
     }
 
     @PostMapping
-    public Todo addTodo(@Valid @RequestBody TodoRequest todoRequest) {
+    public ResponseEntity<Todo> addTodo(@Valid @RequestBody TodoRequest todoRequest) {
 
-        return todoService.addTodo(todoRequest);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(
+                        todoService.addTodo(todoRequest)
+                );
     }
 
     @DeleteMapping("/{id}")
-    public String deleteTodo(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
 
         todoService.deleteTodo(id);
 
-        return "Todo deleted successfully";
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public Todo updateTodo(
+    public ResponseEntity<Todo> updateTodo(
 
             @PathVariable Long id,
 
             @Valid @RequestBody TodoRequest updatedTodo
     ) {
 
-        return todoService.updateTodo(id, updatedTodo);
+        return ResponseEntity.ok(
+                todoService.updateTodo(id, updatedTodo)
+        );
     }
 }
