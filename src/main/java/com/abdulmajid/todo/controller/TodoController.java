@@ -1,5 +1,6 @@
 package com.abdulmajid.todo.controller;
 
+import com.abdulmajid.todo.dto.TodoRequest;
 import com.abdulmajid.todo.model.Todo;
 import com.abdulmajid.todo.repository.TodoRepository;
 import com.abdulmajid.todo.service.TodoService;
@@ -26,9 +27,9 @@ public class TodoController {
     }
 
     @PostMapping
-    public Todo addTodo(@Valid @RequestBody Todo todo) {
+    public Todo addTodo(@Valid @RequestBody TodoRequest todoRequest) {
 
-        return todoService.addTodo(todo);
+        return todoService.addTodo(todoRequest);
     }
 
     @DeleteMapping("/{id}")
@@ -41,9 +42,10 @@ public class TodoController {
 
     @PutMapping("/{id}")
     public Todo updateTodo(
-            @Valid
+
             @PathVariable Long id,
-            @RequestBody Todo updatedTodo
+
+            @Valid @RequestBody TodoRequest updatedTodo
     ) {
 
         return todoService.updateTodo(id, updatedTodo);

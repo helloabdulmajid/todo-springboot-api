@@ -1,5 +1,6 @@
 package com.abdulmajid.todo.service;
 
+import com.abdulmajid.todo.dto.TodoRequest;
 import com.abdulmajid.todo.model.Todo;
 import com.abdulmajid.todo.repository.TodoRepository;
 import org.springframework.stereotype.Service;
@@ -19,15 +20,21 @@ public class TodoService {
 
         return todoRepository.findAll();
     }
-    public Todo addTodo(Todo todo) {
+    public Todo addTodo(TodoRequest todoRequest) {
+        Todo todo = new Todo();
+
+        todo.setText(todoRequest.getText());
+
+        todo.setCompleted(todoRequest.isCompleted());
 
         return todoRepository.save(todo);
+
     }
     public void deleteTodo(Long id) {
 
         todoRepository.deleteById(id);
     }
-    public Todo updateTodo(Long id, Todo updatedTodo) {
+    public Todo updateTodo(Long id, TodoRequest updatedTodo) {
 
         Todo todo = todoRepository
                 .findById(id)

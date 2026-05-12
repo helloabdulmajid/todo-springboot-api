@@ -18,4 +18,6 @@ public class Todo {
     @NotBlank(message = "Task text cannot be empty")
     private String text;
     private boolean completed;
+
+
 }
